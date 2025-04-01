@@ -1,2 +1,26 @@
-/venv
-/clean_data.csv
+# Data tracked by DVC
+data/processed_data
+data/raw_data
+models
+.dvc/cache
+
+# Model files tracked by DVC
+models/*.pkl
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs or temporary files (if any)
+*.log
+*.tmp
+/test.txt
