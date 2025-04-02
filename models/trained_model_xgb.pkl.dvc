@@ -1,5 +1,0 @@
-outs:
-- md5: e9c66c8b574ef1c8c295aca044a03090
-  size: 1235324
-  hash: md5
-  path: trained_model_xgb.pkl
