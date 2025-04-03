@@ -96,8 +96,8 @@ stages:
       size: 142
     - path: src/models/train_model.py
       hash: md5
-      md5: 118e2d728f3b5387b3da67a162619815
-      size: 2779
+      md5: 88bc70dfe9c6eac5973dccfa6dbc051f
+      size: 3972
     outs:
     - path: models/trained_model_xgb.pkl
       hash: md5
@@ -120,8 +120,8 @@ stages:
       size: 1235324
     - path: src/models/evaluate_model.py
       hash: md5
-      md5: 0324cf642e084cc580a5471dac3d616d
-      size: 3688
+      md5: 3538ac2df4846a04c494ee9a00f2fdfd
+      size: 4015
     outs:
     - path: data/predictions.csv
       hash: md5

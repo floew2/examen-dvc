@@ -1,0 +1,15 @@
+artifact_uri: file:///content/examen_dvc_dir/examen-dvc/mlruns/201301421502795264/52f35b39917142d7b87e174b2fb48564/artifacts
+end_time: 1743680775318
+entry_point_name: ''
+experiment_id: '201301421502795264'
+lifecycle_stage: active
+run_id: 52f35b39917142d7b87e174b2fb48564
+run_name: overjoyed-ape-112
+run_uuid: 52f35b39917142d7b87e174b2fb48564
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743680765408
+status: 3
+tags: []
+user_id: root

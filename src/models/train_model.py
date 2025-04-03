@@ -4,6 +4,10 @@ import pickle
 from xgboost import XGBRegressor
 from typing import Dict, Any
 
+import mlflow
+import mlflow.xgboost
+from mlflow.models import infer_signature
+
 def train_model(train_features_path: str, train_target_path: str, best_params_path: str, output_filepath: str) -> None:
     """
     Trains an XGBRegressor model using the best parameters found by GridSearchCV
@@ -15,37 +19,57 @@ def train_model(train_features_path: str, train_target_path: str, best_params_pa
         best_params_path: Path to the .pkl file containing the best parameters for XGBoost.
         output_filepath: Path to save the trained XGBoost model as a .pkl file.
     """
-    try:
-        # Load the training data
-        X_train = pd.read_csv(train_features_path)
-        y_train = pd.read_csv(train_target_path)
+    mlflow.set_tracking_uri(os.environ.get("MLFLhttps://dagshub.com/floew/examen-dvc.mlflowOW_TRACKING_URI"))
+    mlflow.set_experiment("Experiment_XGBoost_SilicaConcentrate")
 
-        # Load the best parameters from the .pkl file
-        with open(best_params_path, 'rb') as file:
-            best_params: Dict[str, Any] = pickle.load(file)
+    with mlflow.start_run() as run:
+        log_params = {}
+        try:
+            # Load the training data
+            X_train = pd.read_csv(train_features_path)
+            y_train = pd.read_csv(train_target_path)
+            log_params["train_features_path"] = train_features_path
+            log_params["train_target_path"] = train_target_path
 
-        print(f"Loaded best parameters for XGBoost: {best_params}")
+            # Load the best parameters from the .pkl file
+            with open(best_params_path, 'rb') as file:
+                best_params: Dict[str, Any] = pickle.load(file)
+            log_params.update(best_params)
+            mlflow.log_params(log_params)
+            print(f"Loaded best parameters for XGBoost: {best_params}")
 
-        # Initialize the regression model with the best parameters (XGBoost)
-        model = XGBRegressor(**best_params, random_state=42)
+            # Initialize the regression model with the best parameters (XGBoost)
+            model = XGBRegressor(**best_params, random_state=42)
 
-        # Train the model
-        print("Training the XGBoost model...")
-        model.fit(X_train, y_train)
+            # Train the model
+            print("Training the XGBoost model...")
+            model.fit(X_train, y_train)
 
-        # Create the output directory if it doesn't exist
-        os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
+            # Infer the model signature
+            signature = infer_signature(X_train, model.predict(X_train)) # Use training data for signature
 
-        # Save the trained model to a .pkl file
-        with open(output_filepath, 'wb') as file:
-            pickle.dump(model, file)
+            # Create the output directory if it doesn't exist
+            os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
 
-        print(f"Trained XGBoost model saved to '{output_filepath}'.")
+            # Save the trained model to a .pkl file
+            with open(output_filepath, 'wb') as file:
+                pickle.dump(model, file)
 
-    except FileNotFoundError:
-        print("Error: One or more input files not found.")
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+            # Log the trained model with MLflow
+            mlflow.xgboost.log_model(
+                xgb_model=model,
+                artifact_path="xgboost-model",
+                signature=signature,
+                registered_model_name="xgb-regressor-model"  # Choose a name
+            )
+            mlflow.log_artifact(output_filepath, "local_model.pkl") # Optionally log the local .pkl file
+
+            print(f"Trained XGBoost model saved to '{output_filepath}' and logged to MLflow.")
+
+        except FileNotFoundError:
+            print("Error: One or more input files not found.")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     # Define paths

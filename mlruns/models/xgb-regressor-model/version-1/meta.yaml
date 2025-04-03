@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1743680775313
+current_stage: None
+description: null
+last_updated_timestamp: 1743680775313
+name: xgb-regressor-model
+run_id: 52f35b39917142d7b87e174b2fb48564
+run_link: null
+source: file:///content/examen_dvc_dir/examen-dvc/mlruns/201301421502795264/52f35b39917142d7b87e174b2fb48564/artifacts/xgboost-model
+status: READY
+status_message: null
+storage_location: file:///content/examen_dvc_dir/examen-dvc/mlruns/201301421502795264/52f35b39917142d7b87e174b2fb48564/artifacts/xgboost-model
+user_id: null
+version: 1
