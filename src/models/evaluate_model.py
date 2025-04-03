@@ -4,6 +4,7 @@ import pickle
 from sklearn.metrics import mean_squared_error, r2_score
 from typing import Any, Dict
 import json
+import yaml
 
 import mlflow
 
@@ -11,8 +12,11 @@ def evaluate_model(model_path: str, test_features_path: str, test_target_path: s
     """
     Loads a trained regression model, evaluates its performance, and logs metrics to MLflow.
     """
-    mlflow.set_tracking_uri(os.environ.get("https://dagshub.com/floew/examen-dvc.mlflow"))
-    mlflow.set_experiment("Experiment_XGBoost_SilicaConcentrate")
+    with open("config/mlflow.yaml", "r") as f:
+        mlflow_config = yaml.safe_load(f)
+
+    mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI"))
+    mlflow.set_experiment(mlflow_config['mlflow']['experiment_names']['evaluate'])
 
     with mlflow.start_run() as run:
         mlflow.log_param("model_path", model_path)

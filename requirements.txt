@@ -6,3 +6,5 @@ dvc==3.59.1
 pathlib==1.0.1
 numpy==2.0.2
 mlflow==2.21.2
+PyYAML==6.0.2
+xgboost==2.1.4

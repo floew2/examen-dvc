@@ -1,0 +1,6 @@
+mlflow:
+  tracking_uri: ${MLFLOW_TRACKING_URI}
+  experiment_names:
+    train: "Experiment Model Training SilicaConcentrate"
+    evaluate: "Experiment Model Evaluation SilicaConcentrate"
+  model_registry_name: "xgb-regressor-model"

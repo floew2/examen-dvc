@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 from xgboost import XGBRegressor
 from typing import Dict, Any
+import yaml
 
 import mlflow
 import mlflow.xgboost
@@ -19,8 +20,11 @@ def train_model(train_features_path: str, train_target_path: str, best_params_pa
         best_params_path: Path to the .pkl file containing the best parameters for XGBoost.
         output_filepath: Path to save the trained XGBoost model as a .pkl file.
     """
-    mlflow.set_tracking_uri(os.environ.get("MLFLhttps://dagshub.com/floew/examen-dvc.mlflowOW_TRACKING_URI"))
-    mlflow.set_experiment("Experiment_XGBoost_SilicaConcentrate")
+    with open("config/mlflow.yaml", "r") as f:
+      mlflow_config = yaml.safe_load(f)
+
+    mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI"))
+    mlflow.set_experiment(mlflow_config['mlflow']['experiment_names']['train'])
 
     with mlflow.start_run() as run:
         log_params = {}
@@ -60,9 +64,9 @@ def train_model(train_features_path: str, train_target_path: str, best_params_pa
                 xgb_model=model,
                 artifact_path="xgboost-model",
                 signature=signature,
-                registered_model_name="xgb-regressor-model"  # Choose a name
+                registered_model_name=mlflow_config['mlflow']['model_registry_name']
             )
-            mlflow.log_artifact(output_filepath, "local_model.pkl") # Optionally log the local .pkl file
+            mlflow.log_artifact(output_filepath, "local_model.pkl")
 
             print(f"Trained XGBoost model saved to '{output_filepath}' and logged to MLflow.")
 
