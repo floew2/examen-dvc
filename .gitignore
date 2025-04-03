@@ -2,9 +2,16 @@
 data/processed_data
 data/raw_data
 .dvc/cache
+data/intermediate/  # Example for intermediate DVC outputs
+
+# mlruns
+mlruns/
 
 # Model files tracked by DVC
 models/*.pkl
+# models/*.h5
+# models/*.pth
+# models/saved_model/
 
 # Python bytecode
 __pycache__/
@@ -22,3 +29,10 @@ Thumbs.db
 # Logs or temporary files (if any)
 *.log
 *.tmp
+
+# Environment variables
+.env
+
+# IDE specific (add if you use these)
+.idea/
+.vscode/
